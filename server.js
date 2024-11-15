@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // Replace with your actual API credentials and endpoint
-const apiUrl = "http://192.168.29.130:8082/"; // The actual API endpoint
+const apiUrl = "http://192.168.1.102:8082/"; // The actual API endpoint
 const apiToken = "0bbfd7cd-d935-4970-b453-badb156a27bc"; // Your token for authentication
 
 // Endpoint to send SMS

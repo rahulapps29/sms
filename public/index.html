@@ -1,147 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Send SMS</title>
-    <style>
-      /* Reset and base styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send SMS</title>
+  <style>
+    /* Your existing styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 1rem;
-      }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
 
-      h2 {
-        text-align: center;
-        margin-bottom: 1rem;
-      }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
 
-      form {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        padding: 1.5rem;
-        width: 100%;
-        max-width: 400px;
-      }
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 400px;
+    }
 
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-      }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
 
-      input,
-      textarea,
-      button {
-        width: 100%;
-        margin-bottom: 1rem;
-        padding: 0.8rem;
-        border: none;
-        border-radius: 5px;
-        font-size: 1rem;
-      }
+    input, textarea, button {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
 
-      input,
-      textarea {
-        background: #fff;
-        color: #333;
-      }
+    input, textarea {
+      background: #fff;
+      color: #333;
+    }
 
-      textarea {
-        resize: none;
-        height: 100px;
-      }
+    textarea {
+      resize: none;
+      height: 100px;
+    }
 
-      button {
-        background: #2575fc;
-        color: #fff;
-        cursor: pointer;
-        transition: background 0.3s ease;
-        font-weight: bold;
-      }
+    button {
+      background: #2575fc;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: bold;
+    }
 
-      button:hover {
-        background: #6a11cb;
-      }
+    button:hover {
+      background: #6a11cb;
+    }
 
-      /* Responsive Design */
-      @media (max-width: 480px) {
-        h2 {
-          font-size: 1.5rem;
-        }
+    #statusMessage {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <form id="smsForm">
+    <h2>Send a Custom SMS</h2>
+    <div id="statusMessage"></div>
+    <label for="number">Mobile Number:</label>
+    <input type="text" id="number" name="number" required placeholder="+91X / XXXX" />
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required placeholder="Your message here..."></textarea>
+    <button type="submit">Send SMS</button>
+  </form>
 
-        button {
-          padding: 0.7rem;
-          font-size: 0.9rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <form id="smsForm">
-      <h2>Send a Custom SMS</h2>
-      <label for="number">Mobile Number:</label>
-      <input
-        type="text"
-        id="number"
-        name="number"
-        required
-        placeholder="+919XXXXXXXXX"
-      />
-      <label for="message">Message:</label>
-      <textarea
-        id="message"
-        name="message"
-        required
-        placeholder="Your message here..."
-      ></textarea>
-      <button type="submit">Send SMS</button>
-    </form>
+  <script>
+    document.getElementById("smsForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
 
-    <script>
-      document
-        .getElementById("smsForm")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
+      const statusMessage = document.getElementById("statusMessage");
+      statusMessage.textContent = "Sending SMS in few seconds...";
+      
+      const to = document.getElementById("number").value;
+      const message = document.getElementById("message").value;
+      const startTime = Date.now();
 
-          const to = document.getElementById("number").value;
-          const message = document.getElementById("message").value;
+      setTimeout(async () => {
+        try {
+          const response = await fetch("/sms/send-sms", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ to, message }),
+          });
 
-          try {
-            const response = await fetch("http://192.168.1.101:3000/send-sms", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ to, message }),
-            });
+          const endTime = Date.now();
+          const duration = ((endTime - startTime) / 1000).toFixed(2); // Calculate duration in seconds
 
-            const result = await response.json();
-            if (result.success) {
-              alert("SMS sent successfully!");
-            } else {
-              alert("Failed to send SMS: " + result.error);
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            alert("An error occurred while sending SMS.");
+          const result = await response.json();
+
+          if (result.success) {
+            statusMessage.textContent = `SMS sent successfully in ${duration} seconds!`;
+          } else {
+            statusMessage.textContent = `Failed to send SMS in ${duration} seconds: ${result.error}`;
           }
-        });
-    </script>
-  </body>
+        } catch (error) {
+          console.error("Error:", error);
+          statusMessage.textContent = "An error occurred while sending SMS.";
+        }
+      }, 2000);
+    });
+  </script>
+</body>
 </html>

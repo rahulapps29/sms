@@ -43,7 +43,7 @@ app.post("/sms/send-sms", async (req, res) => {
     // End timer
     const endTime = Date.now();
     console.log(`SMS API response time: ${endTime - startTime}ms`);
-
+    console.log(`SMS Sent: "${message}" to number: ${to}`);
     // Respond back to the client
     res.json({ success: true, data: response.data });
   } catch (error) {

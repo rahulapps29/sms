@@ -7,15 +7,15 @@ const path = require("path");
 const app = express();
 
 // Serve the HTML form
-app.get('/sms', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get("/sms", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.use(express.json());
 app.use(cors());
 
 // Replace with your actual API credentials and endpoint
-const apiUrl = "http://192.168.1.102:8082/"; // The actual API endpoint
+const apiUrl = "http://192.168.1.190:8082/"; // The actual API endpoint
 const apiToken = "0bbfd7cd-d935-4970-b453-badb156a27bc"; // Your token for authentication
 
 // Endpoint to send SMS
@@ -24,7 +24,7 @@ app.post("/sms/send-sms", async (req, res) => {
 
   try {
     console.log("Sending SMS...");
-    
+
     // Start timer
     const startTime = Date.now();
 
